@@ -30,12 +30,16 @@ if [[ ! -f "$KEY_FILE" ]]; then
     exit 1
 fi
 
-mkdir -p "$HOME/.ssh"
-chmod 700 "$HOME/.ssh"
+if [[ ! -f "$SSH_KEY" ]]; then
+    mkdir -p "$HOME/.ssh"
+    chmod 700 "$HOME/.ssh"
 
-cp "$KEY_FILE" "$SSH_KEY"
-chmod 600 "$SSH_KEY"
-rm -f "$KEY_FILE"
+    cp "$KEY_FILE" "$SSH_KEY"
+    chmod 600 "$SSH_KEY"
+    rm -f "$KEY_FILE"
+else
+    echo "🔑 Ключ $SSH_KEY уже существует"
+fi
 
 if [[ -d "$TARGET_DIR/.git" ]]; then
     echo "Репозиторий уже существует в $TARGET_DIR, обновление..."
