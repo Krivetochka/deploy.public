@@ -32,8 +32,8 @@ if ! command -v git &> /dev/null; then
     fi
 fi
 
-if [[ ! -f "$KEY_FILE" ]]; then
-    echo "❌ Файл "key" не найден рядом со скриптом"
+if [[ ! -f "$KEY_FILE" ]] && [[ ! -f "$SSH_KEY" ]]; then
+    echo "❌ Файл \"key\" не найден рядом со скриптом и SSH-ключ не установлен."
     self_destroy
     exit 1
 fi
