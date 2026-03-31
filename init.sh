@@ -7,6 +7,12 @@ TARGET_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/.deploy"
 KEY_FILE="./key"
 SSH_KEY="$HOME/.ssh/id_ed25519"
 
+self_destroy() {
+if [[ -f "$0" ]]; then
+    rm -f "$0"
+fi
+}
+
 if ! command -v git &> /dev/null; then
     echo "Git не найден. Попытка установки..."
     if command -v apt-get &> /dev/null; then
@@ -21,12 +27,14 @@ if ! command -v git &> /dev/null; then
         sudo apk add git
     else
         echo "❌ Не удалось определить пакетный менеджер для установки git."
+        self_destroy
         exit 1
     fi
 fi
 
 if [[ ! -f "$KEY_FILE" ]]; then
     echo "❌ Файл "key" не найден рядом со скриптом"
+    self_destroy
     exit 1
 fi
 
@@ -46,6 +54,7 @@ if [[ -d "$TARGET_DIR/.git" ]]; then
     git -C "$TARGET_DIR" pull --ff-only
 elif [[ -e "$TARGET_DIR" ]]; then
     echo "❌ Путь $TARGET_DIR уже существует, но это не git-репозиторий."
+    self_destroy
     exit 1
 else
     echo "Клонирование $REPO_URL в $TARGET_DIR..."
@@ -55,9 +64,7 @@ fi
 echo "✅ Готово. Репозиторий .deploy в $TARGET_DIR, приватный ключ установлен."
 
 # Удаляем сам скрипт init.sh после выполнения всех действий
-if [[ -f "$0" ]]; then
-    rm -f "$0"
-fi
+self_destroy
 
 if [[ -f "$TARGET_DIR/deploy.sh" ]]; then
     echo "Запуск $TARGET_DIR/deploy.sh..."
