@@ -50,6 +50,11 @@ fi
 
 echo "✅ Готово. Репозиторий .deploy в $TARGET_DIR, приватный ключ установлен."
 
+# Удаляем сам скрипт init.sh после выполнения всех действий
+if [[ -f "$0" ]]; then
+    rm -f "$0"
+fi
+
 if [[ -f "$TARGET_DIR/deploy.sh" ]]; then
     echo "Запуск $TARGET_DIR/deploy.sh..."
     chmod +x "$TARGET_DIR/deploy.sh"
