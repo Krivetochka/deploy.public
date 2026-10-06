@@ -3,7 +3,7 @@
 set -euo pipefail
 
 REPO_URL="git@github.com:Krivetochka/.deploy.git"
-TARGET_DIR="$(cd "$(dirname "$0")" && pwd)/.deploy"
+TARGET_DIR="$HOME/.deploy"
 KEY_FILE="./key"
 SSH_KEY="$HOME/.ssh/id_ed25519"
 
